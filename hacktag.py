@@ -21,10 +21,10 @@ def EAR(eye):
     ear = num/denom
     return ear
 
-sound = 0
+s = 0
 #Function to play the alarm sound while alarm is on
 def sound(path):
-    while(sound):
+    while(s):
         playsound.playsound(path) 
 
 counter = 0 #To count number of frames
@@ -64,7 +64,7 @@ while True:
                 if(alarm == 0):
                     alarm = 1
                     t = Thread(target=sound,args = ('beep.wav',)) #Replace beep.wav with whatever sound you have saved
-                    sound = 1
+                    s = 1
                     t.start()
 
                 cv.putText(frame, "DROWSINESS ALERT!", (10, 30),
@@ -72,7 +72,7 @@ while True:
         else:
             #End the sound thread if eyes are no longer closed
             if(alarm==1):
-                sound = 0
+                s = 0
                 t.join()
             counter = 0
             alarm = 0
