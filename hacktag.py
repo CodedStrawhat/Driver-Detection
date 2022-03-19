@@ -12,7 +12,7 @@ import cv2 as cv
 cap = cv.VideoCapture(0)
 
 detector = dlib.get_frontal_face_detector() #pre trained face detector model
-predictor = dlib.shape_predictor("landmarks_data.dat") #face landmarks data
+predictor = dlib.shape_predictor("landmarks_data.dat") #face landmarks data (see README for download link)
 
 #Eye aspect ratio 
 def EAR(eye):
