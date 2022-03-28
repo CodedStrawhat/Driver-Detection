@@ -19,24 +19,32 @@ def EAR(eye):
     ear = num/denom
     return ear
 
+#Lip aspect ratio
+def LAR(vert,horz):
+    num = dis.euclidean(horz[0],horz[1])
+    denom = dis.euclidean(vert[0],vert[1])
+    ear = num/denom
+    return ear
+
 s = 0
 #Function to play the alarm sound while alarm is on
 def sound(path):
     while(s):
         playsound.playsound(path) 
 
-counter = 0 #To count number of frames
+counter_eye = 0 #To count number of frames
 alarm = 0 #Whether to play the alarm sound or not
+counter_lip = 0 
 a = 0
+d = np.zeros(2)
 while True:
 
     isTrue,frame = cap.read()
     if isTrue == 0:
         break 
-
     rgb_im = cv.cvtColor(frame, cv.COLOR_BGR2RGB) #Converting image to rgb
 
-    #Finding landmarks for right and left eye
+    #Finding landmarks for face
     output = face_model.process(rgb_im)
     output = output.multi_face_landmarks[0]
     l = []
@@ -56,7 +64,7 @@ while True:
     left_points = np.array(l[[386,374,263,362]][:],dtype = int)
     right_points = np.array(l[[159, 145,133,33]][:], dtype = int)
 
-    #Calculating EAR for left and right eye and average EAR
+    #Calculating Eye aspect ratio for left and right eye and average EAR
     leftEAR = EAR(left_points)
     rightEAR = EAR(right_points)
     ear = (leftEAR+rightEAR)/2.0
@@ -69,25 +77,45 @@ while True:
 
     #If EAR is more than threshold value then eyes are considered closed
     if (ear>5):
-        counter+=1
-        if(counter>=48):    #If eyes are closed for 48 frames or more
+        counter_eye+=1
+        if(counter_eye>=60):    #If eyes are closed for 60 frames or more
+            d[0] = 1
+    else : 
+        d[0] = 0
+        counter_eye = 0
+    
+    #Indexes for top,bottom and left,right of lips
+    left_right = np.array(l[[78,308]][:],dtype = int)
+    top_bot = np.array(l[[13,14]][:],dtype = int)
 
-            #Making a thread object and starting it to play the sound if not aldready playing
-            if(alarm == 0):
-                alarm = 1
-                t = Thread(target=sound,args = ('beep.wav',)) #Replace beep.wav with whatever sound you have saved
-                s = 1
-                t.start()
+    #Calculating lip ratio
+    lip_ratio = LAR(top_bot,left_right)
+    
+    if(lip_ratio <1.8):
+        counter_lip += 1
+        if(counter_lip >= 120):
+            d[1] = 1
+    else:
+        counter_lip = 0
+        d[1] = 0
+        
+    if 1 in d:
+        #Making a thread object and starting it to play the sound if not aldready playing
+        if(alarm == 0):
+            alarm = 1
+            t = Thread(target=sound,args = ('beep.wav',)) #Replace beep.wav with whatever sound you have saved
+            s = 1
+            t.start()
 
-            cv.putText(frame, "DROWSINESS ALERT!", (10, 30),
-            cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv.putText(frame, "DROWSINESS ALERT!", (10, 30),
+        cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     else:
         #End the sound thread if eyes are no longer closed
         if(alarm==1):
             s = 0
             t.join()
-        counter = 0
         alarm = 0
+
     cv.imshow('Video', frame)
     key = cv.waitKey(1)
     if key == 27:
