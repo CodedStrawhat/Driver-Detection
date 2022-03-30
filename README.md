@@ -6,4 +6,6 @@ We have proposed a solution for this problem
 
 In-vehicle driver monitoring systems are going to be a crucial element of vehicles of the future. One important function of such systems is to determine if the driver is paying attention to the road. If not, the system alerts the driver to bring his/her attention back to the road. Some ways to accomplish this are to monitor the driver's eyes and the gaze of their eyes, also to check for single-handed driving. Our solution to this would be based on Computer Vision and Machine Learning to make a device to check for drowsy or distracted driving and alert the driver to bring their attention back to the road.
 
+Weights for the model : https://drive.google.com/file/d/1ZbAz4pGvrnVrh-rhxLkAgTMvHKjlCbAO/view?usp=sharing
+
 
