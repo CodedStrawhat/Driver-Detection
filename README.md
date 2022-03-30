@@ -8,6 +8,10 @@ In-vehicle driver monitoring systems are going to be a crucial element of vehicl
 
 Weights for the model : https://drive.google.com/file/d/1ZbAz4pGvrnVrh-rhxLkAgTMvHKjlCbAO/view?usp=sharing
 
+Visual Demonstration of drowsiness detector - https://drive.google.com/file/d/1fmqYH4RMO5OUlWsB76MoH1TPpBm2aCAq/view
+
+Visual Demonstration of other distractions detector - https://drive.google.com/file/d/1usxD4NrBdcXiL1yXghTFk7x27mhuWfT5/view
+
 **File descriptions**
 
 beep.wav - The sound that will be played to alert the driver(can be replaced by any other)
