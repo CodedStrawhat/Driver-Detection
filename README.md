@@ -11,9 +11,15 @@ Weights for the model : https://drive.google.com/file/d/1ZbAz4pGvrnVrh-rhxLkAgTM
 **File descriptions**
 
 beep.wav - The sound that will be played to alert the driver(can be replaced by any other)
+
 hack_tag_sideview_modeltrainer.ipynb - Notebook file for Colab notebook used for training the model
+
 hacktag.py - Python Program to detect face and check for drowsiness
+
 hacktag_SideCam.py - Python program to use the ML model and classify video feed as safe driving or distracted driving
+
 hacktag_sideview_modeltrain.py - .Py file for colab notebook used for training the model
+
 requirements.txt - For hacktag.py
+
 requirements_side.txt - For hacktag_SideCam.py
