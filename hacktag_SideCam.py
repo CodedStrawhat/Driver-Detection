@@ -21,7 +21,7 @@ class ResNet34(nn.Module):
 
 model = ResNet34(num_classes=10)
 
-classes = ["Safe Driving","Texting Right","Talking left","Texting left","Talking left","Radio","Drinking","Behind","Hair","Talking behind"]
+classes = ["Safe Driving","Possibly distracted","Possibly distracted","Possibly distracted","Possibly distracted","Possibly distracted","Possibly distracted","Possibly distracted","Possibly distracted","Possibly distracted"]
 if torch.cuda.is_available():
     model.load_state_dict(torch.load("Hacktag_side_resnet34.pth",map_location=torch.device('cuda')))
 else:
