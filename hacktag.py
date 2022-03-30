@@ -46,7 +46,14 @@ while True:
 
     #Finding landmarks for face
     output = face_model.process(rgb_im)
-    output = output.multi_face_landmarks[0]
+    try:
+        output = output.multi_face_landmarks[0]
+    except:
+        cv.imshow('Video', frame)
+        key = cv.waitKey(1)
+        if key == 27:
+            break
+        continue
     l = []
     for landmark in output.landmark:
         x = (landmark.x)*frame.shape[1] #Denormalizing points
@@ -84,16 +91,21 @@ while True:
         d[0] = 0
         counter_eye = 0
     
+    #Drawing contour over lips
+    lip_land = [ 61, 146, 91, 181, 84, 17, 314, 405, 321, 375,291, 308, 324, 318, 402, 317, 14, 87, 178, 88, 95,185, 40, 39, 37,0 ,267 ,269 ,270 ,409, 415, 310, 311, 312, 13, 82, 81, 42, 183, 78 ] 
+    lip = np.array(l[lip_land[:]][:],dtype = int)
+    lipHull = cv.convexHull(lip)
+    cv.drawContours(frame, [lipHull], -1, (0,255,0), 1)
+
     #Indexes for top,bottom and left,right of lips
     left_right = np.array(l[[78,308]][:],dtype = int)
     top_bot = np.array(l[[13,14]][:],dtype = int)
-
     #Calculating lip ratio
     lip_ratio = LAR(top_bot,left_right)
     
     if(lip_ratio <1.8):
         counter_lip += 1
-        if(counter_lip >= 120):
+        if(counter_lip >= 45):
             d[1] = 1
     else:
         counter_lip = 0
@@ -101,7 +113,7 @@ while True:
         
     if 1 in d:
         #Making a thread object and starting it to play the sound if not aldready playing
-        if(alarm == 0):
+        if(alarm == 0): 
             alarm = 1
             t = Thread(target=sound,args = ('beep.wav',)) #Replace beep.wav with whatever sound you have saved
             s = 1
@@ -110,7 +122,7 @@ while True:
         cv.putText(frame, "DROWSINESS ALERT!", (10, 30),
         cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     else:
-        #End the sound thread if eyes are no longer closed
+        #End the sound thread if eyes are no longer closed and person is not yawning
         if(alarm==1):
             s = 0
             t.join()
